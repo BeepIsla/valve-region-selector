@@ -1,0 +1,32 @@
+{
+  "name": "valvegames-region-selector",
+  "version": "1.0.0",
+  "description": "Allows you to select what servers to connect to in the following games: `Team Fortress 2` and `Counter-Strike: Global Offensive`",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BeepIsla/valve-region-selector.git"
+  },
+  "keywords": [],
+  "author": "BeepIsla",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/BeepIsla/valve-region-selector/issues"
+  },
+  "homepage": "https://github.com/BeepIsla/valve-region-selector#readme",
+  "devDependencies": {
+    "electron": "^7.1.6"
+  },
+  "dependencies": {
+    "bytebuffer": "^5.0.1",
+    "detect-port": "^1.3.0",
+    "protobufjs": "^6.8.8",
+    "ps-node": "^0.1.6",
+    "request": "^2.88.0",
+    "simple-vdf": "^1.1.1",
+    "ws": "^7.2.1"
+  }
+}

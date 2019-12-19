@@ -1,0 +1,113 @@
+<head>
+	<title>Region Selector</title>
+
+	<link rel="stylesheet" href="../css/bootstrap-material-design.min.css">
+	<link rel="stylesheet" href="../css/styles.css">
+
+	<script src="../js/jquery-3.4.1.min.js"></script>
+	<script src="../js/popper.min.js"></script>
+	<script src="../js/bootstrap-material-design.js"></script>
+
+	<script src="../js/Helper.js" defer></script>
+	<script src="../js/index.js" defer></script>
+</head>
+
+<body>
+	<!-- Snippets -->
+	<snippets>
+		<snippet name="GameTabButton">
+			<button class="btn btn-sm btn-outline-info"></button>
+		</snippet>
+
+		<snippet name="GameTabContainer">
+			<div class="container"></div>
+		</snippet>
+
+		<snippet name="GameTabSlider">
+			<div class="container slider">
+				<div class="custom-control custom-checkbox">
+					<input type="checkbox" class="custom-control-input" id="customCheck1" checked="checked">
+					<label class="custom-control-label" for="customCheck1"></label>
+				</div>
+				<div id="name"></div>
+				<input type="range" min="1" max="500" value="10" class="slider">
+				<div id="input">
+					<input type="text" class="form-control" value="10">
+				</div>
+			</div>
+		</snippet>
+	</snippets>
+
+	<!-- Modal -->
+	<div id="help-modal" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Help & Information</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div>
+						<h6>Simple usage guide</h6>
+						<ol type="1">
+							<li>Close all games</li>
+							<li>Select the game you want to play</li>
+							<li>Choose your fake ping for each region</li>
+							<li><b>(Optional)</b> You can disable regions which will use your real ping and not modify
+								them</li>
+							<li>Click <code>Enable</code></li>
+							<li>Select your <code>Steam.exe</code> and <b>wait</b> until it opens</li>
+							<li>Run your game and play it</li>
+						</ol>
+
+						<i>Note: Keep this program open, closing it will kill your Steam process and cause issues.</i>
+					</div>
+
+					<hr>
+
+					<div>
+						<h6>Tips</h6>
+						<ul>
+							<li>You can modify the pings of multiple games at once without having to restart to switch
+								game.</li>
+							<li>You can modify the pings while this program is already enabled. No restarting required!
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Content -->
+	<div class="container">
+		<div class="container" id="toggle">
+			<button type="button" class="btn btn-raised btn-lg btn-success" value="1">Enable</button>
+			<button type="button" class="btn btn-raised btn-lg btn-danger hidden" value="0">Disable</button>
+			<h2>Status: <span>Waiting</span></h2>
+			<button type="button" class="btn btn-lg btn-primary" data-toggle="modal"
+				data-target="#help-modal">Help</button>
+		</div>
+
+		<hr>
+
+		<div class="container" id="game-tabs">
+		</div>
+
+		<hr>
+
+		<div class="container">
+			<div class="alert alert-danger" role="alert">
+				<strong>Warning!</strong> While some regions exist they may not be used in the game itself and will
+				cause you to never find a match.
+			</div>
+		</div>
+
+		<hr>
+
+		<div class="container" id="game-tabs-container">
+		</div>
+	</div>
+</body>

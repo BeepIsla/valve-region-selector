@@ -1,0 +1,79 @@
+snippets {
+	display: none;
+}
+
+.hidden {
+	display: none;
+}
+
+#toggle {
+	display: grid;
+	grid-auto-flow: column;
+	text-align: center;
+}
+
+#toggle > h2 {
+	position: relative;
+	top: 5px;
+	padding-right: 10px;
+}
+
+#game-tabs {
+	display: flex;
+	overflow-x: scroll;
+	overflow-y: hidden;
+}
+
+#game-tabs-container > div > .slider {
+	display: flex;
+}
+
+#game-tabs-container > div > div > .custom-checkbox {
+	margin: auto;
+}
+
+div.slider > #name {
+	width: 250px;
+	margin: auto;
+}
+
+input.slider {
+	width: 50%;
+}
+
+#game-tabs-container > * > div.slider {
+	outline-color: var(--white);
+	outline-style: solid;
+	outline-width: 1px;
+	height: 32px;
+	text-align: center;
+}
+
+#game-tabs-container > * > div.slider.on {
+	background-color: var(--green);
+	color: var(--white);
+}
+
+#game-tabs-container > * > div.slider.off {
+	background-color: var(--red);
+	color: var(--white);
+}
+
+#game-tabs-container > div > div > .custom-checkbox > .custom-control-input:checked~.custom-control-label:after {
+	background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Cpath fill='%23fff' d='M6.564.75l-3.59 3.612-1.538-1.55L0 4.26l2.974 2.99L8 2.193z'/%3E%3C/svg%3E");
+}
+
+#input > input {
+	color: var(--white);
+	text-align: center;
+	width: 50px;
+	margin-left: 25px;
+}
+
+#input > input:disabled {
+	background-color: var(--red);
+}
+
+svg * {
+	fill: var(--black);
+}

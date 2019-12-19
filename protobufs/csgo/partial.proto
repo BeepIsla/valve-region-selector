@@ -1,0 +1,19 @@
+message GameServerPing {
+	optional int32 ping = 2;
+	optional uint32 ip = 3;
+	optional uint32 instances = 5;
+}
+
+message DataCenterPing {
+	optional fixed32 data_center_id = 1;
+	optional sint32 ping = 2;
+}
+
+message CMsgGCCStrike15_v2_MatchmakingClient2ServerPing {
+	repeated .GameServerPing gameserverpings = 1;
+	optional int32 offset_index = 2;
+	optional int32 final_batch = 3;
+	repeated .DataCenterPing data_center_pings = 4;
+	optional uint32 max_ping = 5;
+	optional fixed32 test_token = 6;
+}

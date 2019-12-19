@@ -1,0 +1,16 @@
+message CMsgGCDataCenterPing_Update {
+	message PingEntry {
+		optional string name = 1;
+		optional uint32 ping = 2;
+		optional .CMsgGCDataCenterPing_Update.Status ping_status = 3 [default = Normal];
+	}
+
+	enum Status {
+		Invalid = 0;
+		Normal = 1;
+		Unreachable = 2;
+		FallbackToDCPing = 3;
+	}
+
+	repeated .CMsgGCDataCenterPing_Update.PingEntry pingdata = 1;
+}

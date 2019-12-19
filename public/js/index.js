@@ -1,0 +1,274 @@
+var Main = (function () {
+	let ipcRenderer = window.ipcRenderer;
+	let games = [
+		{
+			appid: 730,
+			name: "Counter-Strike: Global Offensive"
+		},
+		{
+			appid: 440,
+			name: "Team Fortress 2"
+		},
+		{
+			appid: 1046930,
+			name: "Dota Underlords",
+			disabled: true
+		},
+		{
+			appid: 583950,
+			name: "Artifact",
+			disabled: true
+		},
+		{
+			appid: 570,
+			name: "Dota 2",
+			disabled: true
+		}
+	];
+	let overrides = {
+		730: {
+			can: "Guangzhou Baiyun",
+			canm: "Guangzhou Baiyun (Mobile)",
+			cant: "Guangzhou Baiyun (Telecom)",
+			canu: "Guangzhou Baiyun (Unicom)",
+
+			pwg: false,
+			pwj: false,
+			pwu: false,
+			pww: false,
+			pwz: false,
+
+			tsn: "Tianjin",
+			tsnm: "Tianjin (Mobile)",
+			tsnt: "Tianjin (Telecom)",
+			tsnu: "Tianjin (Unicom)"
+		},
+		440: {}
+	};
+
+	let _Init = async function () {
+		// Fetch pings
+		let configs = await Promise.all(games.map((game) => {
+			return Helper.FetchSDR(game.appid);
+		}));
+
+		for (let config of configs) {
+			let index = games.findIndex(g => g.appid === config.appid);
+			if (index <= -1) {
+				continue;
+			}
+
+			// Add overrides
+			for (let key in overrides[config.appid]) {
+				if (overrides[config.appid][key] === false) {
+					delete config.pops[key];
+					continue;
+				}
+
+				if (typeof overrides[config.appid][key] !== "string") {
+					continue;
+				}
+
+				if (!config.pops[key]) {
+					continue;
+				}
+
+				config.pops[key].desc = overrides[config.appid][key];
+			}
+
+			games[index].config = config.pops;
+		}
+
+		// Add toggle button event
+		$("#toggle > button").on("click", _OnButtonToggle);
+
+		// Fill in tab buttons
+		let gameTabs = $("#game-tabs");
+		let gameTabButtonSnippet = $("snippets > snippet[name=\"GameTabButton\"] > *");
+		for (let game of games) {
+			let clone = gameTabButtonSnippet.clone();
+			clone.text(game.name);
+			clone.attr("id", game.appid.toString());
+
+			if (game.disabled) {
+				clone.addClass("disabled");
+				clone.attr("disabled", true);
+			}
+
+			gameTabs.append(clone);
+		}
+
+		// Fill in ping selections
+		let gameTabContainerSnippet = $("snippets > snippet[name=\"GameTabContainer\"] > *");
+		let gameTabSliderSnipper = $("snippets > snippet[name=\"GameTabSlider\"] > *");
+		let gameTabContainer = $("#game-tabs-container");
+		for (let game of games) {
+			let clone = gameTabContainerSnippet.clone();
+			clone.attr("id", game.appid);
+			clone.addClass("hidden");
+
+			if (game.disabled) {
+				continue;
+			}
+
+			if (!game.config || Object.keys(game.config).length <= 0) {
+				gameTabs.find("#" + game.appid).addClass("disabled");
+				gameTabs.find("#" + game.appid).attr("disabled", true);
+				continue;
+			}
+
+			for (let pop in game.config) {
+				// Most perfect world definitions do not
+				// have a description so we give them a
+				// special hardcoded name
+				if (!game.config[pop].desc) {
+					continue;
+				}
+
+				let sliderClone = gameTabSliderSnipper.clone();
+				sliderClone.find("#name").text(game.config[pop].desc || pop); // There should always be a description but just to be sure
+				sliderClone.addClass("on");
+				sliderClone.attr("id", game.appid + "_" + pop);
+
+				clone.append(sliderClone);
+			}
+
+			gameTabContainer.append(clone);
+		}
+
+		// Add event handler for buttons
+		gameTabs.children("button").on("click", _OnGameToggle);
+		gameTabContainer.find("div > div > .custom-checkbox > .custom-control-label").on("click", _OnCheckboxToggle);
+		gameTabContainer.find("div > div > input.slider").on("input", _OnInputChange);
+		gameTabContainer.find("div > div > #input > input").on("input", _OnTextChange);
+		gameTabContainer.find("div > div > input.slider").on("change", _OnUpdatePings);
+		gameTabContainer.find("div > div > #input > input").on("change", _OnUpdatePings);
+
+		// Automatically select the first tab
+		_OnGameToggle({
+			target: gameTabs.children("button").first()[0]
+		});
+	};
+
+	let _OnUpdatePings = function (ev) {
+		let pings = Helper.GetPingData();
+
+		ipcRenderer.send("pings", {
+			pingData: pings
+		});
+	};
+
+	let _OnInputChange = function (ev) {
+		let el = $(ev.target);
+		el.parent().find("#input > input").val(el.val());
+	};
+
+	let _OnTextChange = function (ev) {
+		let el = $(ev.target);
+		let num = el.val().replace(/[^0-9]/g, "");
+		if (num.length <= 0) {
+			num = 1;
+		} else {
+			num = parseInt(num);
+			if (isNaN(num)) {
+				num = 1;
+			}
+		}
+
+		if (num > 500) {
+			num = 500;
+		}
+
+		el.val(num.toString());
+		el.parent().parent().find("input.slider").val(num.toString());
+	};
+
+	let _OnCheckboxToggle = function (ev) {
+		let el = $(ev.target);
+		let checked = el.parent().find("input").attr("checked");
+		if (!checked) {
+			el.parent().find("input").attr("checked", true);
+			el.parent().parent().removeClass("off");
+			el.parent().parent().addClass("on");
+			el.parent().parent().find("input.slider").removeAttr("disabled");
+			el.parent().parent().find("#input > input").removeAttr("disabled");
+		} else {
+			el.parent().find("input").removeAttr("checked");
+			el.parent().parent().addClass("off");
+			el.parent().parent().removeClass("on");
+			el.parent().parent().find("input.slider").attr("disabled", true);
+			el.parent().parent().find("#input > input").attr("disabled", true);
+		}
+	};
+
+	let _OnGameToggle = function (ev) {
+		$("#game-tabs > button").each((i, e) => {
+			$(e).toggleClass("btn-outline-success", e.isEqualNode(ev.target));
+			$(e).toggleClass("btn-outline-info", !e.isEqualNode(ev.target));
+		});
+
+		let appID = $(ev.target).attr("id");
+		$("#game-tabs-container > div").each((i, e) => {
+			let el = $(e);
+			el.toggleClass("hidden", el.attr("id") !== appID);
+		});
+	};
+
+	let _OnButtonToggle = function (ev) {
+		if ($(ev.target).attr("data-toggle") === "modal") {
+			// This is the modal popup with help information
+			// We don't have to do anything because it is
+			// already handled automatically by bootstrap
+			return;
+		}
+
+		$("#toggle > button").each((i, e) => {
+			if ($(e).attr("data-toggle") === "modal") {
+				return;
+			}
+
+			$(e).toggleClass("hidden", e.isEqualNode(ev.target));
+		});
+
+		// Ensure using only double equals here for type conversion
+		ipcRenderer.send("toggle", {
+			enabled: $(ev.target).val() == true,
+			pingData: Helper.GetPingData()
+		});
+	};
+
+	let _OnStatusUpdate = function (ev, args) {
+		if (args.message) {
+			$("#toggle > h2 > span").text(args.message);
+		}
+
+		$("#toggle > button").each((i, e) => {
+			let el = $(e);
+			if (el.attr("data-toggle") === "modal") {
+				return;
+			}
+
+			el[!args.button ? "attr" : "removeAttr"]("disabled", "");
+		});
+	};
+
+	let _OnStartup = function (ev, args) {
+		// Start has been cancelled so lets force it to be disabled
+		if (args.canceled) {
+			$("#toggle > button.btn-danger").click();
+			$("#toggle > button").removeAttr("disabled");
+		}
+	};
+
+	return {
+		Init: _Init,
+		OnStatusUpdate: _OnStatusUpdate,
+		OnStartup: _OnStartup
+	};
+})();
+
+(function () {
+	$(window).ready(Main.Init);
+	window.ipcRenderer.on("status", Main.OnStatusUpdate);
+	window.ipcRenderer.on("toggle", Main.OnStartup);
+})();
