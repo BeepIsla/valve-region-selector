@@ -1,7 +1,8 @@
 // Modules
-const { app, BrowserWindow, Menu, ipcMain, dialog, clipboard } = require("electron");
+const { app, BrowserWindow, Menu, ipcMain, dialog, clipboard, shell } = require("electron");
 const path = require("path");
 const url = require("url");
+const request = require("request");
 const Interceptor = require("./components/Interceptor.js");
 
 // Global variables
@@ -106,8 +107,73 @@ function createWindow() {
 		mainWindow = null;
 	});
 
-	mainWindow.once("ready-to-show", () => {
+	mainWindow.once("ready-to-show", async () => {
 		mainWindow.show();
+
+		// Check for new releases
+		new Promise((resolve, reject) => {
+			request("https://raw.githubusercontent.com/BeepIsla/valve-region-selector/master/package.json", (err, res, body) => {
+				if (err) {
+					console.error(err);
+
+					reject(err);
+					return;
+				}
+
+				try {
+					let json = typeof body === "object" ? body : JSON.parse(body);
+					if (typeof json !== "object" || typeof json.version !== "string") {
+						reject("Failed to check for updates.\nAPI returned invalid JSON data.");
+						return;
+					}
+
+					if (json.version === app.getVersion()) {
+						// Up-to-date
+						resolve(true);
+						return;
+					}
+
+					resolve(json.version);
+				} catch (err) {
+					console.error(err);
+
+					reject("Failed to check for updates.\nAPI returned invalid JSON data.");
+				}
+			});
+		}).then((version) => {
+			if (typeof version === "string") {
+				dialog.showMessageBox({
+					type: "info",
+					buttons: ["Close", "Open in Browser"],
+					defaultId: 0,
+					cancelId: 0,
+					title: "Update Available!",
+					detail: "A new version (" + version + ") is available!"
+				}).then((resp) => {
+					if (resp.response !== 1) {
+						return;
+					}
+	
+					shell.openExternal("https://github.com/BeepIsla/valve-region-selector/releases/latest");
+				}).catch(() => { });
+			}
+		}).catch((err) => {
+			if (typeof err === "string") {
+				dialog.showMessageBox({
+					type: "error",
+					buttons: ["Close"],
+					title: "Error",
+					detail: err
+				}).catch(() => { });
+			} else {
+				dialog.showMessageBox({
+					type: "error",
+					buttons: ["Close"],
+					title: "Error",
+					detail: err.message || err.code || err.toString()
+				}).catch(() => { });
+			}
+		});
 	});
 }
 
