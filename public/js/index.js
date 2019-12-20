@@ -260,15 +260,26 @@ var Main = (function () {
 		}
 	};
 
+	let _OpenExternalLink = function (ev) {
+		let el = $(ev.target);
+		ipcRenderer.send("openExternal", {
+			url: el.attr("href")
+		});
+
+		ev.preventDefault();
+	};
+
 	return {
 		Init: _Init,
 		OnStatusUpdate: _OnStatusUpdate,
-		OnStartup: _OnStartup
+		OnStartup: _OnStartup,
+		OpenExternalLink: _OpenExternalLink
 	};
 })();
 
 (function () {
 	$(window).ready(Main.Init);
+	$("a[data-type=\"external-link\"]").click(Main.OpenExternalLink);
 	window.ipcRenderer.on("status", Main.OnStatusUpdate);
 	window.ipcRenderer.on("toggle", Main.OnStartup);
 })();

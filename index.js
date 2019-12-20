@@ -153,7 +153,7 @@ function createWindow() {
 					if (resp.response !== 1) {
 						return;
 					}
-	
+
 					shell.openExternal("https://github.com/BeepIsla/valve-region-selector/releases/latest");
 				}).catch(() => { });
 			}
@@ -261,6 +261,10 @@ ipcMain.on("pings", (ev, args) => {
 	}
 
 	interceptor.pingData = args.pingData;
+});
+
+ipcMain.on("openExternal", (ev, args) => {
+	shell.openExternal(args.url);
 });
 
 process.on("unhandledRejection", (reason, promise) => {
