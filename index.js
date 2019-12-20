@@ -10,8 +10,9 @@ let interceptor = new Interceptor();
 
 async function createWindow() {
 	// Setup menu
-	let menu = Menu.buildFromTemplate([
-		{
+	let menuTemplate = [];
+	if (process.argv.join(" ").includes("--inspect")) {
+		menuTemplate.push({
 			label: "Reload",
 			accelerator: "CmdOrCtrl+R",
 			click(item, focusedWindow) {
@@ -19,8 +20,8 @@ async function createWindow() {
 					focusedWindow.reload();
 				}
 			}
-		},
-		{
+		});
+		menuTemplate.push({
 			label: "Toggle Developer Tools",
 			accelerator: process.platform === "darwin" ? "Alt+Command+I" : "Ctrl+Shift+I",
 			click(item, focusedWindow) {
@@ -28,8 +29,10 @@ async function createWindow() {
 					focusedWindow.webContents.toggleDevTools();
 				}
 			}
-		}
-	]);
+		});
+	}
+
+	let menu = Menu.buildFromTemplate(menuTemplate);
 	Menu.setApplicationMenu(menu);
 
 	// Create the browser window
