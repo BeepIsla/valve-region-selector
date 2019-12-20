@@ -107,7 +107,7 @@ function createWindow() {
 		mainWindow = null;
 	});
 
-	mainWindow.once("ready-to-show", async () => {
+	mainWindow.once("ready-to-show", () => {
 		mainWindow.show();
 
 		// Check for new releases
