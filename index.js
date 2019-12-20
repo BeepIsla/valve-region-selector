@@ -1,5 +1,5 @@
 // Modules
-const { app, BrowserWindow, Menu, ipcMain, dialog } = require("electron");
+const { app, BrowserWindow, Menu, ipcMain, dialog, clipboard } = require("electron");
 const path = require("path");
 const url = require("url");
 const Interceptor = require("./components/Interceptor.js");
@@ -7,26 +7,74 @@ const Interceptor = require("./components/Interceptor.js");
 // Global variables
 let mainWindow = null;
 let interceptor = new Interceptor();
+let startupCpuUsage = process.cpuUsage();
+let startupTimestamp = Date.now();
 
 async function createWindow() {
 	// Setup menu
-	let menuTemplate = [];
-	if (process.argv.join(" ").includes("--inspect")) {
-		menuTemplate.push({
-			label: "Reload",
-			accelerator: "CmdOrCtrl+R",
+	let menuTemplate = [
+		{
+			label: "About",
 			click(item, focusedWindow) {
-				if (focusedWindow) {
-					focusedWindow.reload();
-				}
+				let memoryUsage = process.memoryUsage();
+				let systemMemoryInfo = process.getSystemMemoryInfo();
+				let cpuUsage = process.cpuUsage(startupCpuUsage);
+
+				let detailText = [
+					"Arch: " + process.arch,
+					"Platform: " + process.platform,
+					"Process ID: " + process.pid,
+					"Uptime: " + (process.uptime() / 60).toFixed(2) + "m",
+					"Debugging: " + (process.argv.join(" ").includes("--inspect") ? "True" : "False"),
+					"Versions:",
+					Object.keys(process.versions).map((key) => {
+						return "    - " + key + ": " + process.versions[key]
+					}),
+					"Memory Usage:",
+					"    - Resident Set Size: " + (memoryUsage.rss / 1024 / 1024).toFixed(2) + "MB",
+					"    - Total Heap Size: " + (memoryUsage.heapTotal / 1024 / 1024).toFixed(2) + "MB",
+					"    - Heap used: " + (memoryUsage.heapUsed / 1024 / 1024).toFixed(2) + "MB",
+					"System Memory:",
+					"    - Total RAM: " + (systemMemoryInfo.total / 1024 / 1024).toFixed(2) + "GB",
+					"    - Free RAM: " + (systemMemoryInfo.free / 1024 / 1024).toFixed(2) + "GB",
+					"CPU Usage:",
+					"    - Usage: " + (100 * (cpuUsage.user + cpuUsage.system) / ((Date.now() - startupTimestamp) * 1000)).toFixed(2) + "%"
+				].flat().join("\n");
+
+				dialog.showMessageBox({
+					type: "info",
+					buttons: ["Close", "Copy"],
+					defaultId: 0,
+					cancelId: 0,
+					title: "About & Information",
+					detail: detailText
+				}).then((resp) => {
+					if (resp.response !== 1) {
+						return;
+					}
+
+					clipboard.writeText(detailText);
+				}).catch(() => { });
 			}
-		});
-		menuTemplate.push({
+		}
+	];
+
+	if (process.argv.join(" ").includes("--inspect")) {
+		menuTemplate.unshift({
 			label: "Toggle Developer Tools",
 			accelerator: process.platform === "darwin" ? "Alt+Command+I" : "Ctrl+Shift+I",
 			click(item, focusedWindow) {
 				if (focusedWindow) {
 					focusedWindow.webContents.toggleDevTools();
+				}
+			}
+		});
+		menuTemplate.unshift({
+			label: "Reload",
+			accelerator: "CmdOrCtrl+R",
+			click(item, focusedWindow) {
+				if (focusedWindow) {
+					focusedWindow.reload();
 				}
 			}
 		});
