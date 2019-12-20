@@ -10,6 +10,7 @@ let mainWindow = null;
 let interceptor = new Interceptor();
 let startupCpuUsage = process.cpuUsage();
 let startupTimestamp = Date.now();
+let isDebugging = process.argv.join(" ").includes("--inspect");
 
 function createWindow() {
 	// Setup menu
@@ -27,7 +28,7 @@ function createWindow() {
 					"Platform: " + process.platform,
 					"Process ID: " + process.pid,
 					"Uptime: " + (process.uptime() / 60).toFixed(2) + "m",
-					"Debugging: " + (process.argv.join(" ").includes("--inspect") ? "True" : "False"),
+					"Debugging: " + (isDebugging ? "True" : "False"),
 					"Versions:",
 					Object.keys(process.versions).map((key) => {
 						return "    - " + key + ": " + process.versions[key]

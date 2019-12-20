@@ -7,6 +7,7 @@ const detect = require("detect-port");
 const Config = require("./Config.js");
 const Steam = require("./Steam.js");
 const ConnectionHelper = require("./ConnectionHelper.js");
+const isDebugging = process.argv.join(" ").includes("--inspect");
 
 module.exports = class Interceptor extends Events {
 	constructor() {
@@ -196,6 +197,14 @@ module.exports = class Interceptor extends Events {
 				if (!this.clientSocket || this.clientSocket.readyState !== this.clientSocket.OPEN) {
 					clientSocketBacklog.push(data);
 					return;
+				}
+
+				if (isDebugging) {
+					let rawEMsg = data.readInt32LE(0);
+					let eMsg = rawEMsg & ~0x80000000;
+					let isProtobuf = !!(rawEMsg & 0x80000000);
+
+					console.log("Server -> Client " + data.length + " bytes (" + eMsg + " - " + (isProtobuf ? "IsProto" : "IsNotProto") + ")");
 				}
 
 				// Server -> Client is irrelevant to us

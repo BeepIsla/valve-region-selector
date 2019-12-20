@@ -4,6 +4,7 @@ const EMsg = require("./EMsg.js");
 const Protobufs = require("./Protobufs.js");
 const JOBID_NONE = "18446744073709551615";
 const PROTO_MASK = 0x80000000;
+const isDebugging = process.argv.join(" ").includes("--inspect");
 
 module.exports = class Modifier {
 	static async run(header, body, pingData) {
@@ -18,6 +19,10 @@ module.exports = class Modifier {
 		let gcBody;
 		let gcHeader;
 		let protobuf;
+
+		if (isDebugging) {
+			console.log("Sending " + gcMsgType + " (" + body.payload.toString("hex").toUpperCase() + ")");
+		}
 
 		if (body.appid === 440) {
 			// We only care about 6528 (k_EMsgGCDataCenterPing_Update)
@@ -96,6 +101,10 @@ module.exports = class Modifier {
 
 					return dcp;
 				}).filter((dcp) => dcp !== null);
+			}
+
+			if (isDebugging) {
+				console.log(decoded);
 			}
 
 			let modified = Protobufs.encodeProto(protobuf, decoded);
