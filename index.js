@@ -21,6 +21,7 @@ function createWindow() {
 				let cpuUsage = process.cpuUsage(startupCpuUsage);
 
 				let detailText = [
+					"Version: " + app.getVersion(),
 					"Arch: " + process.arch,
 					"Platform: " + process.platform,
 					"Process ID: " + process.pid,
