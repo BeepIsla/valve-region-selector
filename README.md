@@ -2,14 +2,12 @@
 
 Allows you to select what servers to connect to in the following games: `Team Fortress 2` and `Counter-Strike: Global Offensive`
 
-In the future I will maybe add support for more games if required.
+In the future I will maybe add support for more games if requested.
 
 ---
 
 # Installation
 
-1. Install [NodeJS](https://nodejs.org/en/)
-2. Download this repository **and unzip it**
-3. Run the `run.cmd` file
-
-***There are currently no electron binaries available***
+1. Download the latest version from the ["Releases" section](/releases);
+2. Install the program
+3. It should now automatically open, if not run the created `Valve Region Selector.exe` on your desktop
