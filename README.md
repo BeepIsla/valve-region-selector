@@ -25,3 +25,25 @@ In the future I will maybe add support for more games if requested.
 
 - Do I have to restart every time I change the ping settings?
 - - No. You can change your ping settings whenever you want. Some games may update instantly, some may not. Team Fortress 2 for example only updates pings every ~3 minutes so you may have to wait before your changes apply.
+
+# Credit
+
+Thanks for testing and feedback:
+- [Invades](https://github.com/Invades)
+- AutismWell
+
+Made possible in-part by:
+- [NodeJS](https://nodejs.org/)
+- [ElectronJS](https://electronjs.org/)
+- [Material Design for Bootstrap](https://fezvrasta.github.io/bootstrap-material-design/)
+- [jQuery](https://jquery.com/)
+- [PopperJS](https://popper.js.org/)
+- And many [NPM](https://npmjs.com/) modules:
+  - [ByteBuffer](https://npmjs.com/package/bytebuffer)
+  - [detect-port](https://npmjs.com/package/detect-port)
+  - [ProtobufJS](https://npmjs.com/package/protobufjs)
+  - [ps-node](https://npmjs.com/package/ps-node)
+  - [request](https://npmjs.com/package/request)
+  - [simple-vdf](https://npmjs.com/package/simple-vdf)
+  - [ws](https://npmjs.com/package/ws)
+  - A **special thanks** to the [Steam User](https://github.com/DoctorMcKay/node-steam-user) module.
