@@ -127,7 +127,7 @@ var Main = (function () {
 
 				let sliderClone = gameTabSliderSnipper.clone();
 				sliderClone.find("#name").text(game.config[pop].desc || pop); // There should always be a description but just to be sure
-				sliderClone.addClass("on");
+				sliderClone.addClass("enabled");
 				sliderClone.attr("id", game.appid + "_" + pop);
 
 				clone.append(sliderClone);
@@ -139,6 +139,7 @@ var Main = (function () {
 		// Add event handler for buttons
 		gameTabs.children("button").on("click", _OnGameToggle);
 		gameTabContainer.find("div > div > .custom-checkbox > .custom-control-label").on("click", _OnCheckboxToggle);
+		gameTabContainer.find("div > div > .custom-checkbox > .custom-control-input").on("click", _OnCheckboxToggle);
 		gameTabContainer.find("div > div > input.slider").on("input", _OnInputChange);
 		gameTabContainer.find("div > div > #input > input").on("input", _OnTextChange);
 		gameTabContainer.find("div > div > input.slider").on("change", _OnUpdatePings);
@@ -185,20 +186,29 @@ var Main = (function () {
 
 	let _OnCheckboxToggle = function (ev) {
 		let el = $(ev.target);
-		let checked = el.parent().find("input").attr("checked");
-		if (!checked) {
-			el.parent().find("input").attr("checked", true);
-			el.parent().parent().removeClass("off");
-			el.parent().parent().addClass("on");
-			el.parent().parent().find("input.slider").removeAttr("disabled");
-			el.parent().parent().find("#input > input").removeAttr("disabled");
+		let mode = el.parent().find("input").attr("data-mode");
+
+		let modes = [
+			"1", // Enabled (Use custom ping)
+			"0", // Disabled (Force 10000 ping)
+			"2" // Indeterminate (Use real ping)
+		];
+		let index = modes.indexOf(mode);
+		if (index <= -1) {
+			mode = "1";
 		} else {
-			el.parent().find("input").removeAttr("checked");
-			el.parent().parent().addClass("off");
-			el.parent().parent().removeClass("on");
-			el.parent().parent().find("input.slider").attr("disabled", true);
-			el.parent().parent().find("#input > input").attr("disabled", true);
+			mode = modes[index + 1];
+			if (!mode) {
+				mode = modes[0];
+			}
 		}
+		el.parent().find("input").attr("data-mode", mode);
+
+		el.parent().parent().toggleClass("disabled", mode === "0");
+		el.parent().parent().toggleClass("enabled", mode === "1");
+		el.parent().parent().toggleClass("indeterminate", mode === "2");
+
+		ev.preventDefault();
 	};
 
 	let _OnGameToggle = function (ev) {

@@ -17,8 +17,8 @@ In the future I will maybe add support for more games if requested.
 - How do I update?
 - - Uninstall the old version, go to Github and download the new version.
 
-- What do the checkboxes mean? Can I completely disable a region?
-- - You cannot turn off a region. The checkboxes simply mean whether or not the program will modify the ping. If a region is red it will use your real ping. If a region is green it will use your selected ping. If you don't want to connect to a specific region I recommend simply setting it to 500.
+- What do the checkboxes mean?
+- - A legend on what each color means is available in the help section.
 
 - Can I close the program after enabling it?
 - - No. The program is keeping Steam running, if you close it Steam will close too.

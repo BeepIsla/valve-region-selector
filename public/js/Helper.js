@@ -36,6 +36,15 @@ var Helper = (function () {
 			let appID = parts[0];
 			let sdr = parts[1];
 			let ping = $(game).find("input.slider").val();
+			let mode = $(game).find(".custom-checkbox > input").attr("data-mode");
+			let modes = {
+				"1": ping, // Enabled (Use custom ping)
+				"0": "10000", // Disabled (Force 10000 ping)
+				"2": "-1" // Indeterminate (Use real ping)
+			};
+			if (!modes[mode]) {
+				mode = "1";
+			}
 
 			if (!obj[appID]) {
 				obj[appID] = [];
@@ -43,7 +52,7 @@ var Helper = (function () {
 
 			obj[appID].push({
 				sdr: sdr,
-				ping: game.classList.contains("off") ? -1 : ping
+				ping: modes[mode]
 			});
 		}
 

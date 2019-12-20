@@ -88,12 +88,13 @@ function createWindow() {
 	// Create the browser window
 	mainWindow = new BrowserWindow({
 		width: 770 + 16,
-		height: 600 + 58,
+		height: 650 + 58,
 		webPreferences: {
 			preload: path.join(__dirname, "public", "js", "preload.js")
 		},
 		show: false,
-		resizable: false
+		resizable: false,
+		icon: path.join(__dirname, "assets", "icon.ico")
 	});
 
 	// Load main page
