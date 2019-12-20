@@ -1,5 +1,5 @@
 // Modules
-const { app, BrowserWindow, Menu, ipcMain } = require("electron");
+const { app, BrowserWindow, Menu, ipcMain, dialog } = require("electron");
 const path = require("path");
 const url = require("url");
 const Interceptor = require("./components/Interceptor.js");
@@ -97,6 +97,14 @@ ipcMain.on("toggle", async (ev, args) => {
 		if (args.pingData) {
 			interceptor.pingData = args.pingData;
 		}
+
+		await dialog.showMessageBox({
+			type: "info",
+			buttons: ["OK"],
+			title: "Next Step",
+			message: "You will now be required to select your \"Steam.exe\" in your Steam installation path.",
+			detail: "Do not select any shortcuts, select the \"Steam.exe\" out of your Steam installation folder."
+		}).catch(() => { });
 
 		await interceptor.start(mainWindow, async () => {
 			mainWindow.webContents.send("status", {
