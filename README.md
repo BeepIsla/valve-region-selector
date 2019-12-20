@@ -29,7 +29,7 @@ In the future I will maybe add support for more games if requested.
 # Credit
 
 Thanks for testing and feedback:
-- [Invades](https://github.com/Invades)
+- [lnvades](https://github.com/lnvades)
 - AutismWell
 
 Made possible in-part by:
