@@ -10,7 +10,7 @@ let interceptor = new Interceptor();
 let startupCpuUsage = process.cpuUsage();
 let startupTimestamp = Date.now();
 
-async function createWindow() {
+function createWindow() {
 	// Setup menu
 	let menuTemplate = [
 		{
@@ -34,11 +34,10 @@ async function createWindow() {
 					"    - Resident Set Size: " + (memoryUsage.rss / 1024 / 1024).toFixed(2) + "MB",
 					"    - Total Heap Size: " + (memoryUsage.heapTotal / 1024 / 1024).toFixed(2) + "MB",
 					"    - Heap used: " + (memoryUsage.heapUsed / 1024 / 1024).toFixed(2) + "MB",
-					"System Memory:",
+					"System:",
 					"    - Total RAM: " + (systemMemoryInfo.total / 1024 / 1024).toFixed(2) + "GB",
 					"    - Free RAM: " + (systemMemoryInfo.free / 1024 / 1024).toFixed(2) + "GB",
-					"CPU Usage:",
-					"    - Usage: " + (100 * (cpuUsage.user + cpuUsage.system) / ((Date.now() - startupTimestamp) * 1000)).toFixed(2) + "%"
+					"    - CPU Usage: " + (100 * (cpuUsage.user + cpuUsage.system) / ((Date.now() - startupTimestamp) * 1000)).toFixed(2) + "%"
 				].flat().join("\n");
 
 				dialog.showMessageBox({
