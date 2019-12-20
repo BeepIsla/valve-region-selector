@@ -38,7 +38,7 @@ Made possible in-part by:
 - [Material Design for Bootstrap](https://fezvrasta.github.io/bootstrap-material-design/)
 - [jQuery](https://jquery.com/)
 - [PopperJS](https://popper.js.org/)
-- And many [NPM](https://npmjs.com/) modules:
+- And many [NPM](https://npmjs.com/) modules (including their dependencies):
   - [ByteBuffer](https://npmjs.com/package/bytebuffer)
   - [detect-port](https://npmjs.com/package/detect-port)
   - [ProtobufJS](https://npmjs.com/package/protobufjs)
