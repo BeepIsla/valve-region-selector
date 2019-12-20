@@ -15,7 +15,7 @@
     "productName": "Valve Region Selector",
     "copyright": "Copyright © 2019 ${author}",
     "win": {
-      "target": "msi",
+      "target": "nsis",
       "icon": "assets/icon.ico"
     }
   },
