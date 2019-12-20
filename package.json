@@ -4,11 +4,20 @@
   "description": "Allows you to select what servers to connect to in the following games: `Team Fortress 2` and `Counter-Strike: Global Offensive`",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/BeepIsla/valve-region-selector.git"
+  },
+  "build": {
+    "productName": "Valve Region Selector",
+    "copyright": "Copyright © 2019 ${author}",
+    "win": {
+      "target": "msi",
+      "icon": "assets/icon.ico"
+    }
   },
   "keywords": [],
   "author": "BeepIsla",
@@ -18,7 +27,8 @@
   },
   "homepage": "https://github.com/BeepIsla/valve-region-selector#readme",
   "devDependencies": {
-    "electron": "^7.1.6"
+    "electron": "^7.1.6",
+    "electron-builder": "^21.2.0"
   },
   "dependencies": {
     "bytebuffer": "^5.0.1",
