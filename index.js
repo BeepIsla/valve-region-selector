@@ -46,8 +46,9 @@ function createWindow() {
 					buttons: ["Close", "Copy"],
 					defaultId: 0,
 					cancelId: 0,
+					message: "Valve Region Selector",
 					title: "About & Information",
-					detail: detailText
+					detail: "Created by github.com/BeepIsla\n\n" + detailText
 				}).then((resp) => {
 					if (resp.response !== 1) {
 						return;
