@@ -46,4 +46,4 @@ Made possible in-part by:
   - [request](https://npmjs.com/package/request)
   - [simple-vdf](https://npmjs.com/package/simple-vdf)
   - [ws](https://npmjs.com/package/ws)
-  - A **special thanks** to the [Steam User](https://github.com/DoctorMcKay/node-steam-user) module.
+  - A **special thanks** to the [steam-user](https://npmjs.com/package/steam-user) module.
