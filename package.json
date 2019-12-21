@@ -6,7 +6,8 @@
   "scripts": {
     "start": "electron .",
     "pack": "electron-builder --dir",
-    "dist": "electron-builder"
+    "dist-win": "electron-builder --win",
+    "dist-linux": "electorn-builder --linux"
   },
   "repository": {
     "type": "git",
@@ -18,6 +19,10 @@
     "win": {
       "target": "nsis",
       "icon": "assets/icon.ico"
+    },
+    "linux": {
+      "target": "AppImage",
+      "icon": "assets/48x48.png"
     }
   },
   "keywords": [],
