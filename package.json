@@ -6,8 +6,7 @@
   "scripts": {
     "start": "electron .",
     "pack": "electron-builder --dir",
-    "dist-win": "electron-builder --win",
-    "dist-linux": "electron-builder --linux"
+    "dist": "electron-builder"
   },
   "repository": {
     "type": "git",
@@ -22,7 +21,8 @@
     },
     "linux": {
       "target": "AppImage",
-      "icon": "assets/48x48.png"
+      "icon": "assets/256x256.png",
+      "category": "Network"
     }
   },
   "keywords": [],
