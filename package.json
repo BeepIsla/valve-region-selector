@@ -1,6 +1,6 @@
 {
   "name": "valvegames-region-selector",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Allows you to select what servers to connect to in the following games: `Team Fortress 2` and `Counter-Strike: Global Offensive`",
   "main": "index.js",
   "scripts": {
