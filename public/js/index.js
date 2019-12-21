@@ -1,6 +1,7 @@
 var Main = (function () {
 	let ipcRenderer = window.ipcRenderer;
 	let isLinux = window.isLinux;
+	let localStorage = window.localStorage;
 	let games = [
 		{
 			appid: 730,
@@ -157,10 +158,22 @@ var Main = (function () {
 		_OnGameToggle({
 			target: gameTabs.children("button").first()[0]
 		});
+
+		// Load pre-existing ping data
+		let pings = localStorage.getItem("pings");
+		if (pings) {
+			try {
+				Helper.SetPingData(JSON.parse(pings));
+			} catch {
+				localStorage.removeItem("pings");
+			}
+		}
 	};
 
 	let _OnUpdatePings = function (ev) {
 		let pings = Helper.GetPingData();
+
+		localStorage.setItem("pings", JSON.stringify(pings));
 
 		ipcRenderer.send("pings", {
 			pingData: pings

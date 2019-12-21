@@ -59,9 +59,46 @@ var Helper = (function () {
 		return obj;
 	};
 
+	let _SetPingData = function (pings) {
+		for (let appid in pings) {
+			let game = $("#game-tabs-container > #" + appid);
+
+			for (let ping of pings[appid]) {
+				let div = game.find("#" + appid + "_" + ping.sdr);
+				let checkbox = div.find(".custom-checkbox > input.custom-control-input");
+				let slider = div.find("input.slider");
+				let input = div.find("#input > input.form-control");
+
+				if (ping.ping == -1) {
+					div.toggleClass("indeterminate", true);
+					div.toggleClass("disabled", false);
+					div.toggleClass("enabled", false);
+
+					checkbox.attr("data-mode", "2");
+				} else if (ping.ping == 10000) {
+					div.toggleClass("indeterminate", false);
+					div.toggleClass("disabled", true);
+					div.toggleClass("enabled", false);
+
+					checkbox.attr("data-mode", "0");
+				} else {
+					div.toggleClass("indeterminate", false);
+					div.toggleClass("disabled", false);
+					div.toggleClass("enabled", true);
+
+					checkbox.attr("data-mode", "1");
+
+					slider.val(ping.ping);
+					input.val(ping.ping);
+				}
+			}
+		}
+	};
+
 	return {
 		FetchSDR: _FetchSDR,
-		GetPingData: _GetPingData
+		GetPingData: _GetPingData,
+		SetPingData: _SetPingData
 	};
 })();
 
