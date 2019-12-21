@@ -9,6 +9,9 @@ In the future I will maybe add support for more games if requested.
 # Installation
 
 1. Download the latest version from the `Releases` section
+   - On Windows download: `Valve.Region.Selector.Setup.<version>.exe`
+   - On Linux download: `Valve.Region.Selector-<version>.AppImage`
+     - Note: Most of these instructions are related to Windows only but if you are using Linux you should know how it works.
 2. Install the program
 3. It should now automatically open, if not run the created `Valve Region Selector.exe` on your desktop
 
@@ -42,6 +45,7 @@ In the future I will maybe add support for more games if requested.
 # Credit
 
 Thanks for testing and feedback:
+- [Neonx99](https://github.com/Neonx99)
 - [lnvades](https://github.com/lnvades)
 - AutismWell
 
