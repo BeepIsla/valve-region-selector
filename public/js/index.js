@@ -140,6 +140,7 @@ var Main = (function () {
 		gameTabs.children("button").on("click", _OnGameToggle);
 		gameTabContainer.find("div > div > .custom-checkbox > .custom-control-label").on("click", _OnCheckboxToggle);
 		gameTabContainer.find("div > div > .custom-checkbox > .custom-control-input").on("click", _OnCheckboxToggle);
+		gameTabContainer.find("div > div > .custom-checkbox > .custom-control-input").on("click", _OnUpdatePings);
 		gameTabContainer.find("div > div > input.slider").on("input", _OnInputChange);
 		gameTabContainer.find("div > div > #input > input").on("input", _OnTextChange);
 		gameTabContainer.find("div > div > input.slider").on("change", _OnUpdatePings);
