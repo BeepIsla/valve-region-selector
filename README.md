@@ -39,6 +39,9 @@ In the future I will maybe add support for more games if requested.
 - Do I have to restart every time I change the ping settings?
   - No. You can change your ping settings whenever you want. Some games may update instantly, some may not. Team Fortress 2 for example only updates pings every ~3 minutes so you may have to wait before your changes apply.
 
+- Why not just use a VPN?
+  - Steam disallows the usage of VPNs though I don't think they ban for it unless you use it to excessively buy games for cheaper. This program does not let you buy game for cheaper and does not change your IP. *Also not everyone has a VPN.*
+
 - You made typos in the regions!
   - These regions are directly ripped from Valve, all complains about typos regarding the regions go to Valve.
 
