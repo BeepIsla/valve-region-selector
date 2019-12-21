@@ -1,5 +1,6 @@
 const { dialog } = require("electron");
 const path = require("path");
+const os = require("os");
 const fs = require("fs");
 const VDF = require("simple-vdf");
 const hardcodedCMs = [
@@ -158,7 +159,7 @@ module.exports = class Config {
 			let steamPath = await dialog.showOpenDialog(mainWindow, {
 				title: "Steam Directory",
 				properties: ["openFile"],
-				defaultPath: isLinux ? "~/.local/share/Steam" : undefined,
+				defaultPath: isLinux ? path.join(os.userInfo().homedir, ".local", "share", "Steam") : undefined,
 				filters: [
 					{
 						name: "Steam",
