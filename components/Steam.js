@@ -1,6 +1,7 @@
 const ps = require("ps-node");
 const childProcess = require("child_process");
 const request = require("request");
+const isLinux = !["win32", "darwin"].includes(process.platform);
 
 module.exports = class Steam {
 	constructor() {
@@ -18,8 +19,17 @@ module.exports = class Steam {
 
 				this.steamProcess.kill("SIGKILL");
 				this.steamProcess = null;
-				resolve(true);
-				return;
+
+				if (!isLinux) {
+					resolve(true);
+					return;
+				}
+
+				// The reason we only resolve when not on linux is because on
+				// linux steam starts using the "steam.sh" file in the installation
+				// directory while on windows it uses the direct "steam.exe"
+				// killing the "steam.sh" on linux doesn't kill our steam process
+				// so we have to do that before resolving
 			}
 
 			ps.lookup({
@@ -31,7 +41,7 @@ module.exports = class Steam {
 				}
 
 				for (let result of results) {
-					if (!/steam\.\w+$/i.test(result.command)) {
+					if (!/(steam\.\w+)|(steam)$/i.test(result.command)) {
 						continue;
 					}
 

@@ -11,6 +11,7 @@ const hardcodedCMs = [
 	"cm3-sto1.cm.steampowered.com:27020", "CM02-LUX.cm.steampowered.com:27020", "cm4-sto1.cm.steampowered.com:27020",
 	"cm4-sto1.cm.steampowered.com:443", "cm4-sto1.cm.steampowered.com:27021"
 ];
+const isLinux = !["win32", "darwin"].includes(process.platform);
 
 module.exports = class Config {
 	constructor() {
@@ -157,10 +158,11 @@ module.exports = class Config {
 			let steamPath = await dialog.showOpenDialog(mainWindow, {
 				title: "Steam Directory",
 				properties: ["openFile"],
+				defaultPath: isLinux ? "~/.local/share/Steam" : undefined,
 				filters: [
 					{
 						name: "Steam",
-						extensions: ["exe"]
+						extensions: [isLinux ? "*" : "exe"]
 					}
 				]
 			}).catch(reject);
