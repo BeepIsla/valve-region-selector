@@ -7,7 +7,7 @@
     "start": "electron .",
     "pack": "electron-builder --dir",
     "dist-win": "electron-builder --win",
-    "dist-linux": "electorn-builder --linux"
+    "dist-linux": "electron-builder --linux"
   },
   "repository": {
     "type": "git",
