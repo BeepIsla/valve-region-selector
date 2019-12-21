@@ -11,6 +11,7 @@ let interceptor = new Interceptor();
 let startupCpuUsage = process.cpuUsage();
 let startupTimestamp = Date.now();
 let isDebugging = process.argv.join(" ").includes("--inspect");
+let isLinux = !["win32", "darwin"].includes(process.platform);
 
 function createWindow() {
 	// Setup menu
@@ -219,8 +220,8 @@ ipcMain.on("toggle", async (ev, args) => {
 			type: "info",
 			buttons: ["OK"],
 			title: "Next Step",
-			message: "You will now be required to select your \"Steam.exe\" in your Steam installation path.",
-			detail: "Do not select any shortcuts, select the \"Steam.exe\" out of your Steam installation folder."
+			message: "You will now be required to select your \"" + (isLinux ? "Steam.sh" : "Steam.exe") + "\" " + (isLinux ? "file" : "") + " in your Steam installation path.",
+			detail: "Do not select any shortcuts, select the \"" + (isLinux ? "Steam.sh" : "Steam.exe") + "\" " + (isLinux ? "file" : "") + " out of your Steam installation folder."
 		}).catch(() => { });
 
 		await interceptor.start(mainWindow, async () => {

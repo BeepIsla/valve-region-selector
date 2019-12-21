@@ -1,5 +1,6 @@
 var Main = (function () {
 	let ipcRenderer = window.ipcRenderer;
+	let isLinux = window.isLinux;
 	let games = [
 		{
 			appid: 730,
@@ -47,6 +48,11 @@ var Main = (function () {
 	};
 
 	let _Init = async function () {
+		// Change HTML stuff depending on OS
+		if (isLinux) {
+			$(".modal-content > .modal-body > div > ol > li > #steamExe").text("Steam.sh");
+		}
+
 		// Fetch pings
 		let configs = await Promise.all(games.map((game) => {
 			return Helper.FetchSDR(game.appid);
