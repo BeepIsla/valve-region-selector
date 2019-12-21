@@ -163,7 +163,7 @@ module.exports = class Config {
 				filters: [
 					{
 						name: "Steam",
-						extensions: [isLinux ? "*" : "exe"]
+						extensions: [isLinux ? "sh" : "exe"]
 					}
 				]
 			}).catch(reject);
