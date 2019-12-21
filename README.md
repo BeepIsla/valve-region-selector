@@ -12,6 +12,10 @@ In the future I will maybe add support for more games if requested.
 2. Install the program
 3. It should now automatically open, if not run the created `Valve Region Selector.exe` on your desktop
 
+# Previews
+
+![Preview](./assets/preview.png)
+
 # Questions
 
 - How do I update?
