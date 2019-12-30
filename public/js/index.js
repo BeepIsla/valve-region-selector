@@ -324,6 +324,8 @@ var Main = (function () {
 		SDR_divs.toggleClass("indeterminate", setTo === "set-all-indeterminate");
 		SDR_divs.toggleClass("disabled", setTo === "set-all-disabled");
 		SDR_divs.toggleClass("enabled", setTo === "set-all-enabled");
+
+		_OnUpdatePings();
 	};
 
 	return {
