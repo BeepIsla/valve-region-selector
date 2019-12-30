@@ -161,7 +161,31 @@
 
 		<hr>
 
-		<div class="container" id="game-tabs-container">
+		<div class="container">
+			<div class="container" id="set-all-checkboxes">
+				<div class="custom-control custom-checkbox">
+					<input type="checkbox" data-mode="0" class="custom-control-input" id="set-all-disabled"
+						checked="checked">
+					<label class="custom-control-label" for="set-all-disabled"></label>
+				</div>
+
+				<div class="custom-control custom-checkbox">
+					<input type="checkbox" data-mode="1" class="custom-control-input" id="set-all-enabled"
+						checked="checked">
+					<label class="custom-control-label" for="set-all-enabled"></label>
+				</div>
+
+				<div class="custom-control custom-checkbox">
+					<input type="checkbox" data-mode="2" class="custom-control-input" id="set-all-indeterminate"
+						checked="checked">
+					<label class="custom-control-label" for="set-all-indeterminate"></label>
+				</div>
+
+				<label>Switch all</label>
+			</div>
+
+			<div class="container" id="game-tabs-container">
+			</div>
 		</div>
 	</div>
 </body>

@@ -296,18 +296,50 @@ var Main = (function () {
 		ev.preventDefault();
 	};
 
+	let _OnClickSetAllCheckboxes = function (ev) {
+		let el = $(ev.target);
+
+		ev.preventDefault();
+
+		while (!["DIV", "BODY"].includes(el.prop("tagName"))) {
+			el = el.parent();
+		}
+
+		if (el.prop("tagName") === "BODY") {
+			return;
+		}
+
+		let setTo = el.find("input").attr("id");
+		let SDR_divs = $("#game-tabs-container > .container").filter((i, el) => {
+			return !el.classList.contains("hidden");
+		}).find(".container.slider");
+		let SDR_checkboxes = SDR_divs.find(".custom-checkbox > input.custom-control-input");
+		let modes = {
+			"set-all-disabled": "0",
+			"set-all-enabled": "1",
+			"set-all-indeterminate": "2"
+		};
+
+		SDR_checkboxes.attr("data-mode", modes[setTo]);
+		SDR_divs.toggleClass("indeterminate", setTo === "set-all-indeterminate");
+		SDR_divs.toggleClass("disabled", setTo === "set-all-disabled");
+		SDR_divs.toggleClass("enabled", setTo === "set-all-enabled");
+	};
+
 	return {
 		Init: _Init,
 		OnStatusUpdate: _OnStatusUpdate,
 		OnStartup: _OnStartup,
 		OpenExternalLink: _OpenExternalLink,
-		OnUpdatePings: _OnUpdatePings
+		OnUpdatePings: _OnUpdatePings,
+		OnClickSetAllCheckboxes: _OnClickSetAllCheckboxes
 	};
 })();
 
 (function () {
 	$(window).ready(Main.Init);
 	$("a[data-type=\"external-link\"]").click(Main.OpenExternalLink);
+	$("#set-all-checkboxes > div").on("click", Main.OnClickSetAllCheckboxes);
 	window.ipcRenderer.on("status", Main.OnStatusUpdate);
 	window.ipcRenderer.on("toggle", Main.OnStartup);
 })();

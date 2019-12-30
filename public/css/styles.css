@@ -111,3 +111,20 @@ input.slider {
 .radio > label {
 	color: var(--black);
 }
+
+#set-all-checkboxes > .custom-checkbox > label::after {
+	outline-style: solid;
+	outline-color: var(--black);
+	outline-width: 1px;
+}
+
+#set-all-checkboxes {
+	display: inline-flex;
+	position: relative;
+	left: 15px;
+}
+
+#set-all-checkboxes > label {
+	position: relative;
+	top: 5px;
+}
