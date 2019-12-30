@@ -7,8 +7,10 @@
 	<script src="../js/jquery-3.4.1.min.js"></script>
 	<script src="../js/popper.min.js"></script>
 	<script src="../js/bootstrap-material-design.js"></script>
+	<script src="../js/snackbar.min.js"></script>
 
 	<script src="../js/Helper.js" defer></script>
+	<script src="../js/Config.js" defer></script>
 	<script src="../js/index.js" defer></script>
 </head>
 
@@ -35,6 +37,15 @@
 				<div id="input">
 					<input type="text" class="form-control" value="10">
 				</div>
+			</div>
+		</snippet>
+
+		<snippet name="ConfigSelectRadio">
+			<div class="radio">
+				<label>
+					<input type="radio" name="ConfigSelection" value="">
+					<span class="bmd-radio"></span>
+				</label>
 			</div>
 		</snippet>
 	</snippets>
@@ -87,12 +98,49 @@
 		</div>
 	</div>
 
+	<div id="config-modal" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Configs</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<form>
+						<div class="form-group" id="new-config">
+							<h6>Create New Config</h6>
+							<input type="text" class="form-control" placeholder="Config Name">
+							<button type="button" class="btn btn-primary btn-raised">Create</button>
+						</div>
+
+						<hr>
+
+						<div class="form-group" id="saveloaddelete-config">
+							<h6>Save/Load/Delete config</h6>
+
+							<div id="saveloaddelete-config-selection">
+							</div>
+
+							<button type="button" id="config-save" class="btn btn-primary btn-raised">Save</button>
+							<button type="button" id="config-load" class="btn btn-primary btn-raised">Load</button>
+							<button type="button" id="config-delete" class="btn btn-primary btn-raised">Delete</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
 	<!-- Content -->
 	<div class="container">
 		<div class="container" id="toggle">
 			<button type="button" class="btn btn-raised btn-lg btn-success" value="1">Enable</button>
 			<button type="button" class="btn btn-raised btn-lg btn-danger hidden" value="0">Disable</button>
 			<h2>Status: <span>Waiting</span></h2>
+			<button type="button" class="btn btn-lg btn-primary" data-toggle="modal"
+				data-target="#config-modal">Configs</button>
 			<button type="button" class="btn btn-lg btn-primary" data-toggle="modal"
 				data-target="#help-modal">Help</button>
 		</div>

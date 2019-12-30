@@ -107,3 +107,7 @@ input.slider {
 #input > input:disabled {
 	background-color: var(--red);
 }
+
+.radio > label {
+	color: var(--black);
+}

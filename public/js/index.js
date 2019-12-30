@@ -1,7 +1,6 @@
 var Main = (function () {
 	let ipcRenderer = window.ipcRenderer;
 	let isLinux = window.isLinux;
-	let localStorage = window.localStorage;
 	let games = [
 		{
 			appid: 730,
@@ -158,22 +157,10 @@ var Main = (function () {
 		_OnGameToggle({
 			target: gameTabs.children("button").first()[0]
 		});
-
-		// Load pre-existing ping data
-		let pings = localStorage.getItem("pings");
-		if (pings) {
-			try {
-				Helper.SetPingData(JSON.parse(pings));
-			} catch {
-				localStorage.removeItem("pings");
-			}
-		}
 	};
 
 	let _OnUpdatePings = function (ev) {
 		let pings = Helper.GetPingData();
-
-		localStorage.setItem("pings", JSON.stringify(pings));
 
 		ipcRenderer.send("pings", {
 			pingData: pings
@@ -230,6 +217,8 @@ var Main = (function () {
 		el.parent().parent().toggleClass("indeterminate", mode === "2");
 
 		ev.preventDefault();
+
+		_OnUpdatePings();
 	};
 
 	let _OnGameToggle = function (ev) {
@@ -250,6 +239,11 @@ var Main = (function () {
 			// This is the modal popup with help information
 			// We don't have to do anything because it is
 			// already handled automatically by bootstrap
+
+			if ($(ev.target).attr("data-target") === "#config-modal") {
+				Config.Init();
+			}
+
 			return;
 		}
 
@@ -260,6 +254,8 @@ var Main = (function () {
 
 			$(e).toggleClass("hidden", e.isEqualNode(ev.target));
 		});
+
+		_OnUpdatePings();
 
 		// Ensure using only double equals here for type conversion
 		ipcRenderer.send("toggle", {
@@ -304,7 +300,8 @@ var Main = (function () {
 		Init: _Init,
 		OnStatusUpdate: _OnStatusUpdate,
 		OnStartup: _OnStartup,
-		OpenExternalLink: _OpenExternalLink
+		OpenExternalLink: _OpenExternalLink,
+		OnUpdatePings: _OnUpdatePings
 	};
 })();
 
