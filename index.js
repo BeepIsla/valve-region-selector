@@ -5,6 +5,12 @@ const url = require("url");
 const request = require("request");
 const Interceptor = require("./components/Interceptor.js");
 
+// Force single instance
+let singleInstance = app.requestSingleInstanceLock();
+if (!singleInstance) {
+	app.quit();
+}
+
 // Global variables
 let mainWindow = null;
 let interceptor = new Interceptor();
@@ -199,6 +205,16 @@ app.on("activate", () => {
 	}
 
 	createWindow();
+});
+
+app.on("second-instance", (ev, argv, dir) => {
+	if (mainWindow) {
+		if (mainWindow.isMinimized()) {
+			mainWindow.restore();
+		}
+
+		mainWindow.focus();
+	}
 });
 
 ipcMain.on("toggle", async (ev, args) => {
