@@ -1,5 +1,5 @@
 // Modules
-const { app, BrowserWindow, Menu, ipcMain, dialog, clipboard, shell } = require("electron");
+const { app, BrowserWindow, Menu, ipcMain, dialog, clipboard, shell, Tray, Notification } = require("electron");
 const path = require("path");
 const url = require("url");
 const request = require("request");
@@ -13,11 +13,14 @@ if (!singleInstance) {
 
 // Global variables
 let mainWindow = null;
+let tray = null;
 let interceptor = new Interceptor();
 let startupCpuUsage = process.cpuUsage();
 let startupTimestamp = Date.now();
 let isDebugging = process.argv.join(" ").includes("--inspect");
 let isLinux = !["win32", "darwin"].includes(process.platform);
+let showedHiddenNotification = false;
+let isQuitting = false;
 
 function createWindow() {
 	// Setup menu
@@ -93,6 +96,31 @@ function createWindow() {
 	let menu = Menu.buildFromTemplate(menuTemplate);
 	Menu.setApplicationMenu(menu);
 
+	let contextMenu = Menu.buildFromTemplate([
+		{
+			label: "Open",
+			click: () => {
+				mainWindow.show();
+			}
+		},
+		{
+			label: "Quit",
+			click: () => {
+				isQuitting = true;
+				app.quit();
+			}
+		}
+	]);
+
+	tray = new Tray(isLinux ? "./assets/256x256.png" : "./assets/icon.ico");
+	tray.setContextMenu(contextMenu);
+	tray.setToolTip("Region Selector");
+	tray.on("click", () => {
+		if (mainWindow) {
+			mainWindow.show();
+		}
+	});
+
 	// Create the browser window
 	mainWindow = new BrowserWindow({
 		width: 770 + 16,
@@ -111,6 +139,35 @@ function createWindow() {
 		protocol: "file:",
 		slashes: true
 	}));
+
+	mainWindow.on("close", (ev) => {
+		if (isQuitting) {
+			return;
+		}
+
+		ev.preventDefault();
+		mainWindow.hide();
+
+		if (showedHiddenNotification) {
+			return;
+		}
+		showedHiddenNotification = true;
+
+		let hiddenNotification = new Notification({
+			title: "Application hidden",
+			body: "I am now hidden in the system tray, right-click my icon to quit.",
+			silent: true,
+			icon: isLinux ? "./assets/256x256.png" : "./assets/icon.ico"
+		});
+		hiddenNotification.on("click", () => {
+			hiddenNotification.close();
+		});
+		hiddenNotification.show();
+
+		setTimeout(() => {
+			hiddenNotification.close();
+		}, 10000);
+	});
 
 	mainWindow.on("closed", () => {
 		mainWindow = null;
