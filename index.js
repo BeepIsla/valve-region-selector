@@ -112,7 +112,7 @@ function createWindow() {
 		}
 	]);
 
-	tray = new Tray(isLinux ? "./assets/256x256.png" : "./assets/icon.ico");
+	tray = new Tray(path.join(isDebugging ? __dirname : process.resourcesPath, "assets", isLinux ? "256x256.png" : "icon.ico"));
 	tray.setContextMenu(contextMenu);
 	tray.setToolTip("Region Selector");
 	tray.on("click", () => {
@@ -157,7 +157,7 @@ function createWindow() {
 			title: "Application hidden",
 			body: "I am now hidden in the system tray, right-click my icon to quit.",
 			silent: true,
-			icon: isLinux ? "./assets/256x256.png" : "./assets/icon.ico"
+			icon: path.join(isDebugging ? __dirname : process.resourcesPath, "assets", isLinux ? "256x256.png" : "icon.ico")
 		});
 		hiddenNotification.on("click", () => {
 			hiddenNotification.close();

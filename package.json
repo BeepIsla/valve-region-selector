@@ -16,8 +16,13 @@
     "productName": "Valve Region Selector",
     "copyright": "Copyright © 2019 ${author}",
     "extraFiles": [
-      "assets/256x256.png",
-      "assets/icon.ico"
+      {
+        "from": "assets",
+        "to": "resources/assets",
+        "filter": [
+          "**/*"
+        ]
+      }
     ],
     "win": {
       "target": "nsis",
