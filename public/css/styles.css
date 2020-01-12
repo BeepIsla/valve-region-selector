@@ -73,11 +73,11 @@ input.slider {
 }
 
 .custom-checkbox > input[type="checkbox"][data-mode="1"]~.custom-control-label:after {
-	background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Cpath fill='%23000' d='M6.564.75l-3.59 3.612-1.538-1.55L0 4.26l2.974 2.99L8 2.193z'/%3E%3C/svg%3E");
+	background-image: url("../images/checked.svg");
 }
 
 .custom-checkbox > input[type="checkbox"][data-mode="2"]~.custom-control-label:after {
-	background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 4'%3E%3Cpath stroke='%23000' d='M0 2h4'/%3E%3C/svg%3E");
+	background-image: url("../images/indeterminate.svg");
 }
 
 #color-legend > ul > li {
