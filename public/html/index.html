@@ -33,6 +33,7 @@
 					<label class="custom-control-label" for="customCheck1"></label>
 				</div>
 				<div id="name"></div>
+				<div id="time">Unfetched</div>
 				<input type="range" min="1" max="500" value="10" class="slider">
 				<div id="input">
 					<input type="text" class="form-control" value="10">
@@ -84,6 +85,27 @@
 							<li>Use custom ping</li>
 							<li>Use real ping</li>
 							<li>Disable</li>
+						</ul>
+					</div>
+
+					<hr>
+
+					<div id="time-info">
+						<h6>Timezones</h6>
+						<ul>
+							<li>
+								<span>Why does it say "Unfetched" for me?</span>
+								<ul>
+									<li>Timezones get fetched one after another from <a data-type="external-link" href="http://worldtimeapi.org/">World Time API</a>, this may take a few minutes.</li>
+								</ul>
+							</li>
+
+							<li>
+								<span>So does this mean I have to wait a few minutes every time I start?</span>
+								<ul>
+									<li>No, all timezone data is stored locally, once fetched they will never be refetched.</li>
+								</ul>
+							</li>
 						</ul>
 					</div>
 

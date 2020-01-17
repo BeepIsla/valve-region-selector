@@ -37,8 +37,13 @@ div.slider > #name {
 	margin: auto;
 }
 
+div.slider > #time {
+	width: 100px;
+	margin: auto;
+}
+
 input.slider {
-	width: 50%;
+	width: 30%;
 }
 
 #game-tabs-container > * > div.slider {
