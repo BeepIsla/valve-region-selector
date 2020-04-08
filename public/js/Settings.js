@@ -1,8 +1,18 @@
-var Config = (function () {
+var Settings = (function () {
 	let localStorage = window.localStorage;
+	let fixedNames = window.fixedNames;
 	let _configs = {};
+	let fixedNamesEnabled = false;
 
 	let _Init = function () {
+		// Fixed names
+		if (!localStorage.getItem("fixedNames")) {
+			localStorage.setItem("fixedNames", "false");
+		}
+
+		$("#fixed-names > .switch > label > input").prop("checked", localStorage.getItem("fixedNames") === "true");
+
+		// Configs
 		if (!localStorage.getItem("configs")) {
 			localStorage.setItem("configs", "{}");
 		}
@@ -41,6 +51,10 @@ var Config = (function () {
 
 			$("#saveloaddelete-config-selection > .radio").on("click", _RadioOnClick);
 		}
+	};
+
+	let _Open = function () {
+		$("#new-config > input").val("");
 	};
 
 	let _RadioOnClick = function (ev) {
@@ -172,18 +186,45 @@ var Config = (function () {
 		return obj;
 	};
 
+	let _SwitchFixedNames = function () {
+		let newFixedNamesEnabled = $("#fixed-names > .switch > label > input").prop("checked");
+		if (newFixedNamesEnabled === fixedNamesEnabled) {
+			// For some reason this event triggers twice
+			return;
+		}
+		fixedNamesEnabled = newFixedNamesEnabled;
+		localStorage.setItem("fixedNames", fixedNamesEnabled ? "true" : "false");
+
+		for (let key in fixedNames) {
+			let name = $("[id$=" + key + "] #name");
+			if (!name.attr("valvename")) {
+				name.attr("valvename", name.first().text()); // Names are the same across games
+			}
+
+			if (fixedNamesEnabled) {
+				name.text(fixedNames[key]);
+			} else {
+				// At this point the div should always have a "fixedname" attribute
+				name.text(name.attr("valvename"));
+			}
+		}
+	};
+
 	return {
 		Init: _Init,
+		Open: _Open,
 		CreateNewConfig: _CreateNewConfig,
 		SaveConfig: _SaveConfig,
 		LoadConfig: _LoadConfig,
-		DeleteConfig: _DeleteConfig
+		DeleteConfig: _DeleteConfig,
+		SwitchFixedNames: _SwitchFixedNames
 	};
 })();
 
 (function () {
-	$("#new-config > button").on("click", Config.CreateNewConfig);
-	$("#config-save").on("click", Config.SaveConfig);
-	$("#config-load").on("click", Config.LoadConfig);
-	$("#config-delete").on("click", Config.DeleteConfig);
+	$("#new-config > button").on("click", Settings.CreateNewConfig);
+	$("#config-save").on("click", Settings.SaveConfig);
+	$("#config-load").on("click", Settings.LoadConfig);
+	$("#config-delete").on("click", Settings.DeleteConfig);
+	$("#fixed-names > .switch > label").on("click", Settings.SwitchFixedNames);
 })();

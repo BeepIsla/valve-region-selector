@@ -10,7 +10,7 @@
 	<script src="../js/snackbar.min.js"></script>
 
 	<script src="../js/Helper.js" defer></script>
-	<script src="../js/Config.js" defer></script>
+	<script src="../js/Settings.js" defer></script>
 	<script src="../js/index.js" defer></script>
 </head>
 
@@ -124,7 +124,7 @@
 		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title">Configs</h5>
+					<h5 class="modal-title">Settings</h5>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
@@ -149,6 +149,28 @@
 							<button type="button" id="config-load" class="btn btn-primary btn-raised">Load</button>
 							<button type="button" id="config-delete" class="btn btn-primary btn-raised">Delete</button>
 						</div>
+
+						<hr>
+
+						<div class="form-group" id="fixed-names">
+							<div class="switch">
+								<label>
+									<input type="checkbox">
+
+									<span class="bmd-switch-track">
+										<div class="ripple-container"></div>
+									</span>
+
+									Fixed Names
+								</label>
+							</div>
+
+							<small class="form-text text-muted">
+								<a data-type="external-link" href="https://github.com/BeepIsla/valve-region-selector/blob/master/public/data/SdrFixedNames.json">
+									Not all names fixed? You can help!
+								</a>
+							</small>
+						</div>
 					</form>
 				</div>
 			</div>
@@ -162,7 +184,7 @@
 			<button type="button" class="btn btn-raised btn-lg btn-danger hidden" value="0">Disable</button>
 			<h2>Status: <span>Waiting</span></h2>
 			<button type="button" class="btn btn-lg btn-primary" data-toggle="modal"
-				data-target="#config-modal">Configs</button>
+				data-target="#config-modal">Settings</button>
 			<button type="button" class="btn btn-lg btn-primary" data-toggle="modal"
 				data-target="#help-modal">Help</button>
 		</div>

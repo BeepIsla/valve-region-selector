@@ -51,6 +51,9 @@ var Main = (function () {
 	let fetchTimezones = [];
 
 	let _Init = async function () {
+		// Init settings
+		Settings.Init();
+
 		// Timezone saving/loading & time updating
 		if (!localStorage.getItem("timezones")) {
 			localStorage.setItem("timezones", "{}");
@@ -183,10 +186,11 @@ var Main = (function () {
 		gameTabContainer.find("div > div > input.slider").on("change", _OnUpdatePings);
 		gameTabContainer.find("div > div > #input > input").on("change", _OnUpdatePings);
 
-		// Automatically select the first tab
+		// Automatically select the first tab & Fix names
 		_OnGameToggle({
 			target: gameTabs.children("button").first()[0]
 		});
+		Settings.SwitchFixedNames();
 	};
 
 	let _FetchTimezone = async function (addr, snippet) {
@@ -369,7 +373,7 @@ var Main = (function () {
 			// already handled automatically by bootstrap
 
 			if ($(ev.target).attr("data-target") === "#config-modal") {
-				Config.Init();
+				Settings.Open();
 			}
 
 			return;

@@ -85,6 +85,10 @@ input.slider {
 	background-image: url("../images/indeterminate.svg");
 }
 
+#fixed-names > div > label {
+	color: black;
+}
+
 #color-legend > ul > li {
 	padding: 1px;
 	margin: 1px;
