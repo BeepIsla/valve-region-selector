@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "electron .",
-    "pack": "electron-builder --dir",
-    "dist": "electron-builder"
+    "pack": "electron-builder --x64 --ia32 --dir",
+    "dist": "electron-builder --x64 --ia32"
   },
   "repository": {
     "type": "git",
