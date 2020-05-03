@@ -29,10 +29,10 @@ var Main = (function () {
 	];
 	let overrides = {
 		730: {
-			can: "Guangzhou Baiyun",
-			canm: "Guangzhou Baiyun (Mobile)",
-			cant: "Guangzhou Baiyun (Telecom)",
-			canu: "Guangzhou Baiyun (Unicom)",
+			can: "Guangzhou",
+			canm: "Guangzhou (Mobile)",
+			cant: "Guangzhou (Telecom)",
+			canu: "Guangzhou (Unicom)",
 
 			pwg: false,
 			pwj: false,
