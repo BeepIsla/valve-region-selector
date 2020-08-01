@@ -49,7 +49,7 @@ In the future I will maybe add support for more games if requested.
 
 Thanks for testing and feedback:
 - [Neonx99](https://github.com/Neonx99)
-- [lnvades](https://github.com/lnvades)
+- [Invades](https://github.com/Invades)
 - AutismWell
 
 Made possible in-part by:
