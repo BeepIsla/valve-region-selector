@@ -471,8 +471,8 @@ var Main = (function () {
 })();
 
 (function () {
-	$(window).ready(Main.Init);
-	$("a[data-type=\"external-link\"]").click(Main.OpenExternalLink);
+	$(Main.Init);
+	$("a[data-type=\"external-link\"]").on("click", Main.OpenExternalLink);
 	$("#set-all-checkboxes > div").on("click", Main.OnClickSetAllCheckboxes);
 	window.ipcRenderer.on("status", Main.OnStatusUpdate);
 	window.ipcRenderer.on("toggle", Main.OnStartup);
