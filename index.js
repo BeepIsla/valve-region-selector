@@ -72,7 +72,7 @@ function createWindow() {
 		}
 	];
 
-	if (process.argv.join(" ").includes("--inspect")) {
+	if (isDebugging) {
 		menuTemplate.unshift({
 			label: "Toggle Developer Tools",
 			accelerator: process.platform === "darwin" ? "Alt+Command+I" : "Ctrl+Shift+I",
