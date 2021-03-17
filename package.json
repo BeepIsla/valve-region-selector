@@ -4,7 +4,7 @@
   "description": "Allows you to select what servers to connect to in the following games: `Team Fortress 2` and `Counter-Strike: Global Offensive`",
   "main": "index.js",
   "scripts": {
-    "start": "electron . --manual",
+    "start": "electron .",
     "pack": "electron-builder --x64 --ia32 --dir",
     "dist": "electron-builder --x64 --ia32"
   },

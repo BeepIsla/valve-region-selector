@@ -17,9 +17,8 @@ let tray = null;
 let interceptor = new Interceptor();
 let startupCpuUsage = process.cpuUsage();
 let startupTimestamp = Date.now();
-let isDebugging = process.argv.join(" ").includes("--inspect");
+let isDebugging = process.argv[0].endsWith("electron.exe");
 let isLinux = !["win32", "darwin"].includes(process.platform);
-let isManual = process.argv.join(" ").includes("--manual");
 let showedHiddenNotification = false;
 let isQuitting = false;
 
@@ -40,7 +39,6 @@ function createWindow() {
 					"Process ID: " + process.pid,
 					"Uptime: " + (process.uptime() / 60).toFixed(2) + "m",
 					"Debugging: " + (isDebugging ? "True" : "False"),
-					"From Run-Script: " + (isManual ? "True" : "False"),
 					"Versions:",
 					Object.keys(process.versions).map((key) => {
 						return "    - " + key + ": " + process.versions[key]
@@ -114,7 +112,7 @@ function createWindow() {
 		}
 	]);
 
-	tray = new Tray(path.join((isDebugging || isManual) ? __dirname : process.resourcesPath, "assets", isLinux ? "256x256.png" : "icon.ico"));
+	tray = new Tray(path.join(isDebugging ? __dirname : process.resourcesPath, "assets", isLinux ? "256x256.png" : "icon.ico"));
 	tray.setContextMenu(contextMenu);
 	tray.setToolTip("Region Selector");
 	tray.on("click", () => {
@@ -159,7 +157,7 @@ function createWindow() {
 			title: "Application hidden",
 			body: "I am now hidden in the system tray, right-click my icon to quit.",
 			silent: true,
-			icon: path.join((isDebugging || isManual) ? __dirname : process.resourcesPath, "assets", isLinux ? "256x256.png" : "icon.ico")
+			icon: path.join(isDebugging ? __dirname : process.resourcesPath, "assets", isLinux ? "256x256.png" : "icon.ico")
 		});
 		hiddenNotification.on("click", () => {
 			hiddenNotification.close();
