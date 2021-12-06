@@ -55,7 +55,6 @@ Thanks for testing and feedback:
 Made possible in-part by:
 - [NodeJS](https://nodejs.org/)
 - [ElectronJS](https://electronjs.org/)
-- [World Time API](http://worldtimeapi.org/)
 - [Material Design for Bootstrap](https://fezvrasta.github.io/bootstrap-material-design/)
 - [jQuery](https://jquery.com/)
 - [PopperJS](https://popper.js.org/)

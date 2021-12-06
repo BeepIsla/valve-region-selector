@@ -95,37 +95,10 @@ var Helper = (function () {
 		}
 	};
 
-	let _GetTimezone = function (ip) {
-		return new Promise((resolve, reject) => {
-			fetch("http://worldtimeapi.org/api/ip/" + ip + ".txt").then((res) => {
-				if (res.status !== 200) {
-					return new Promise((_, rej) => {
-						rej(new Error(res.statusText));
-					});
-				}
-
-				return res.text();
-			}).then((text) => {
-				let obj = {};
-				let lines = text.split("\n");
-				for (let line of lines) {
-					let parts = line.split(":");
-					let key = parts.shift().trim();
-					let value = parts.join(":").trim();
-					obj[key] = value;
-				}
-				resolve(obj);
-			}).catch((err) => {
-				reject(err);
-			});
-		});
-	};
-
 	return {
 		FetchSDR: _FetchSDR,
 		GetPingData: _GetPingData,
-		SetPingData: _SetPingData,
-		GetTimezone: _GetTimezone
+		SetPingData: _SetPingData
 	};
 })();
 

@@ -1,7 +1,8 @@
 var Main = (function () {
 	let ipcRenderer = window.ipcRenderer;
-	let localStorage = window.localStorage;
 	let isLinux = window.isLinux;
+	let tzdb = window.tzdb;
+	let cities = window.cities;
 	let games = [
 		{
 			appid: 730,
@@ -47,26 +48,12 @@ var Main = (function () {
 		},
 		440: {}
 	};
-	let timezones = {};
-	let fetchTimezones = [];
 
 	let _Init = async function () {
 		// Init settings
 		Settings.Init();
 
-		// Timezone saving/loading & time updating
-		if (!localStorage.getItem("timezones")) {
-			localStorage.setItem("timezones", "{}");
-		}
-
-		try {
-			timezones = JSON.parse(localStorage.getItem("timezones"));
-		} catch {
-			localStorage.setItem("timezones", "{}");
-			timezones = {};
-			console.error("Failed to load timezone data - Forced to rebuild");
-		}
-
+		// Clocks
 		setInterval(_UpdateTimes, 1000);
 
 		// Change HTML stuff depending on OS
@@ -152,22 +139,15 @@ var Main = (function () {
 					continue;
 				}
 
-				let ipAddress = undefined;
-				if (game.config[pop].relay_addresses && game.config[pop].relay_addresses[0]) {
-					ipAddress = game.config[pop].relay_addresses[0].split(":").shift();
-				} else if (game.config[pop].relays && game.config[pop].relays[0] && game.config[pop].relays[0].ipv4) {
-					ipAddress = game.config[pop].relays[0].ipv4;
-				} else if (game.config[pop].service_address_ranges && game.config[pop].service_address_ranges[0]) {
-					ipAddress = game.config[pop].service_address_ranges[0].split("/").shift();
-					ipAddress = ipAddress.split("-").shift();
-				}
-
 				let sliderClone = gameTabSliderSnipper.clone();
-				sliderClone.find("#name").text(game.config[pop].desc || pop); // There should always be a description but just to be sure
+				sliderClone.find("#name").text(game.config[pop].desc);
 				sliderClone.addClass("enabled");
 				sliderClone.attr("id", game.appid + "_" + pop);
 
-				_FetchTimezone(ipAddress, sliderClone);
+				let offset = _GetTimezone(game.config[pop].desc, game.config[pop].geo);
+				if (typeof offset === "number") {
+					sliderClone.find("#time").attr("offset", offset);
+				}
 
 				clone.append(sliderClone);
 			}
@@ -193,76 +173,77 @@ var Main = (function () {
 		Settings.SwitchFixedNames();
 	};
 
-	let _FetchTimezone = async function (addr, snippet) {
-		if (!addr || !snippet || snippet.length <= 0) {
-			return;
+	let _GetTimezone = function (name, geo) {
+		// This entire thing is very slow and bad but it works
+		let match = name.match(/^(?<name>.*)(\(|,).*$/);
+		if (match) {
+			name = match.groups.name.trim();
 		}
 
-		let timeDiv = snippet.find("#time");
-		if (!timeDiv || timeDiv.length <= 0) {
-			return;
+		// Get timezones directly if available
+		let timezones = tzdb.getTimeZones();
+		for (let timezone of timezones) {
+			if (timezone.mainCities.map(c => c.toLowerCase()).includes(name.toLowerCase())) {
+				return timezone.rawOffsetInMinutes * 60;
+			}
 		}
 
-		fetchTimezones.push({
-			ip: addr,
-			div: timeDiv
-		});
-
-		if (fetchTimezones.length > 1) {
-			// Only run the while loop one at a time
-			return;
-		}
-
-		while (fetchTimezones.length > 0) {
-			let notFound = false;
-			let timezone = undefined;
-			while (!timezone) {
-				if (timezones[fetchTimezones[0].ip]) {
-					timezone = timezones[fetchTimezones[0].ip];
-				} else {
-					timezone = await Helper.GetTimezone(fetchTimezones[0].ip).catch((err) => {
-						if (err.message !== "Not Found") {
-							return;
-						}
-
-						notFound = true;
-					});
-
-					if (notFound) {
-						break;
+		// Else try to get it from a list of all cities
+		for (let city of cities) {
+			if (city.name.toLowerCase() === name.toLowerCase()) {
+				for (let timezone of timezones) {
+					if (
+						timezone.mainCities.map(c => c.toLowerCase()).includes(city.country.toLowerCase()) ||
+						timezone.countryCode.toLowerCase() === city.country.toLowerCase()
+					) {
+						return timezone.rawOffsetInMinutes * 60;
 					}
 				}
+			}
+		}
 
-				if (!timezone) {
-					await new Promise(p => setTimeout(p, 10000));
+		// Else try rough city name
+		for (let city of cities) {
+			if (city.name.toLowerCase().includes(name.toLowerCase())) {
+				for (let timezone of timezones) {
+					if (
+						timezone.mainCities.find(c => c.toLowerCase().includes(city.country.toLowerCase())) ||
+						timezone.countryCode.toLowerCase().includes(city.country.toLowerCase())
+					) {
+						return timezone.rawOffsetInMinutes * 60;
+					}
 				}
 			}
-
-			if (notFound) {
-				console.error(fetchTimezones[0].ip + " > Failed to find timezone");
-				fetchTimezones.shift();
-				continue;
-			}
-
-			if (timezone.error) {
-				console.error(fetchTimezones[0].ip + " > " + timezone.error);
-				fetchTimezones.shift();
-				continue;
-			}
-
-			let ip = fetchTimezones[0].ip;
-			let div = fetchTimezones[0].div;
-			fetchTimezones.shift();
-
-			timezones[ip] = {
-				// We only need to save the "raw_offset" parameter, everything else is irrelevant to us
-				raw_offset: timezone.raw_offset
-			};
-			localStorage.setItem("timezones", JSON.stringify(timezones));
-
-			div.attr("offset", timezone.raw_offset);
-			_UpdateTimes();
 		}
+
+		// If nothing works try to fix the names
+		let replacers = {
+			"Sao Paulo": "São Paulo"
+		};
+		if (replacers[name]) {
+			return _GetTimezone(replacers[name], geo);
+		}
+
+		// Last resort - Try geolocation
+		for (let city of cities) {
+			if (!city.loc || !city.loc.coordinates) {
+				continue;
+			}
+
+			if (geo[0].toFixed(1) === city.loc.coordinates[0].toFixed(1) && geo[1].toFixed(1) === city.loc.coordinates[1].toFixed(1)) {
+				for (let timezone of timezones) {
+					if (
+						timezone.mainCities.find(c => c.toLowerCase().includes(city.country.toLowerCase())) ||
+						timezone.countryCode.toLowerCase().includes(city.country.toLowerCase())
+					) {
+						return timezone.rawOffsetInMinutes * 60;
+					}
+				}
+			}
+		}
+
+		console.log(name);
+		return undefined;
 	};
 
 	let _UpdateTimes = function () {
@@ -276,12 +257,12 @@ var Main = (function () {
 			}
 
 			let date = new Date();
-			let msOffset = date.getTime() + (offset * 1000) + (date.getTimezoneOffset() * 60 * 1000);
+			let msOffset = Date.now() + (offset * 1000);
 			date.setTime(msOffset);
 
-			let hours = date.getHours();
+			let hours = date.getUTCHours();
 			hours = hours <= 9 ? ("0" + hours) : hours;
-			let minutes = date.getMinutes();
+			let minutes = date.getUTCMinutes();
 			minutes = minutes <= 9 ? ("0" + minutes) : minutes;
 
 			if (el.text() === (hours + ":" + minutes)) {
