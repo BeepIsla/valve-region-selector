@@ -42,7 +42,7 @@
   },
   "homepage": "https://github.com/BeepIsla/valve-region-selector#readme",
   "devDependencies": {
-    "electron": "^11.5.0",
+    "electron": "^18.3.7",
     "electron-builder": "^21.2.0"
   },
   "dependencies": {
