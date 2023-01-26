@@ -1,5 +1,7 @@
 # Region Selector
 
+### **NOTE:  *This program is not currently functional due to changes with Steam's networking system. Please find an alternative.***
+
 Allows you to select what servers to connect to in the following games: `Team Fortress 2` and `Counter-Strike: Global Offensive`
 
 In the future I will maybe add support for more games if requested.
