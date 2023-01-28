@@ -4,9 +4,11 @@ Allows you to select what servers to connect to in the following games: `Team Fo
 
 In the future I will maybe add support for more games if requested.
 
+## It does not work anymore. Look for other alternatives.
+
 ---
 
-# Installation
+## Installation
 
 1. Download the latest version from the `Releases` section
    - On Windows download: `Valve.Region.Selector.Setup.<version>.exe`
@@ -15,11 +17,11 @@ In the future I will maybe add support for more games if requested.
 2. Install the program
 3. It should now automatically open, if not run the created `Valve Region Selector.exe` on your desktop
 
-# Previews
+## Previews
 
 ![Preview](./assets/preview.png)
 
-# Questions
+## Questions
 
 - Can I get banned for this?
   - Technically anything could get you banned and things could change whenever Valve wants to. This program **does not** modify the game nor VAC. It intercepts all Steam traffic and modifies only one specific packet which tells the matchmaker what ping you have to different regions. Everything else stays untouched.
@@ -45,7 +47,7 @@ In the future I will maybe add support for more games if requested.
 - You made typos in the regions!
   - These regions are directly ripped from Valve, all complains about typos regarding the regions go to Valve.
 
-# Credit
+## Credit
 
 Thanks for testing and feedback:
 - [Neonx99](https://github.com/Neonx99)
